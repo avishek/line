@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "LinkedIn CDP Resume Downloader",
+  "version": "0.1.0",
+  "description": "Download LinkedIn profile PDF by driving browser actions through CDP.",
+  "action": {
+    "default_title": "LinkedIn Resume Downloader",
+    "default_popup": "popup.html"
+  },
+  "permissions": [
+    "tabs",
+    "downloads",
+    "debugger",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://www.linkedin.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  }
+}

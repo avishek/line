@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>LinkedIn Extractor</title>
+    <link rel="stylesheet" href="popup.css" />
+  </head>
+  <body>
+    <main class="container">
+      <h1>LinkedIn Batch Resume Downloader</h1>
+      <label for="urlFile">Text file with profile URLs (one per line)</label>
+      <input id="urlFile" type="file" accept=".txt,text/plain" />
+      <button id="startBtn" type="button">Start Batch Download</button>
+      <p id="status" role="status" aria-live="polite"></p>
+      <p id="progress" class="muted" aria-live="polite"></p>
+      <pre id="results" class="results" aria-live="polite"></pre>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>

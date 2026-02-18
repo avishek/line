@@ -1,0 +1,26 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "line-flow"
+version = "0.1.0"
+description = "Metaflow pipelines for PDF-derived competency cards"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+  "metaflow",
+  "openai",
+  "pydantic>=2.0",
+  "pypdf",
+  "python-dotenv",
+]
+
+[project.scripts]
+competency-card-flow = "flow.pipelines.competency_card_flow:main"
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+
+[tool.setuptools.packages.find]
+where = ["src"]

@@ -1,0 +1,14 @@
+# Sample / fixture data (HAR, downloaded markdown, etc.)
+**/*.har
+
+# macOS
+.DS_Store
+**/.DS_Store
+
+# Dependencies (if added later)
+node_modules/
+
+# Build / IDE
+*.log
+.env
+.env.local

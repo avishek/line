@@ -1,0 +1,91 @@
+:root {
+  color-scheme: light;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f3f6f8;
+  color: #1f2933;
+}
+
+.container {
+  width: 360px;
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+h1 {
+  margin: 0 0 4px;
+  font-size: 16px;
+}
+
+label {
+  font-size: 12px;
+  font-weight: 600;
+}
+
+input {
+  border: 1px solid #c7d0d9;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 13px;
+}
+
+button {
+  margin-top: 4px;
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  font-size: 13px;
+  font-weight: 700;
+  background: #0a66c2;
+  color: #ffffff;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+#status {
+  margin: 4px 0 0;
+  min-height: 18px;
+  font-size: 12px;
+}
+
+#status.error {
+  color: #b42318;
+}
+
+#status.ok {
+  color: #067647;
+}
+
+#progress {
+  margin: 0;
+  min-height: 16px;
+  font-size: 12px;
+}
+
+.muted {
+  color: #475467;
+}
+
+.results {
+  margin: 0;
+  min-height: 80px;
+  max-height: 220px;
+  overflow: auto;
+  border: 1px solid #d0d5dd;
+  border-radius: 8px;
+  background: #ffffff;
+  padding: 8px;
+  font-size: 11px;
+  line-height: 1.45;
+  white-space: pre-wrap;
+  word-break: break-word;
+}

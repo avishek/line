@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "LinkedIn Batch Resume Downloader",
+  "version": "0.1.0",
+  "description": "Download LinkedIn profile resumes (PDF) in batch using CDP automation.",
+  "action": {
+    "default_title": "LinkedIn Batch Resume Downloader",
+    "default_popup": "popup.html"
+  },
+  "permissions": ["tabs", "downloads", "storage", "debugger"],
+  "host_permissions": ["https://www.linkedin.com/*"],
+  "background": {
+    "service_worker": "background.js"
+  }
+}

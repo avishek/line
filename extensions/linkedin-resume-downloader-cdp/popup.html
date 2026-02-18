@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>LinkedIn Resume Downloader</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 12px;
+        width: 320px;
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        color: #1f2328;
+      }
+      h1 {
+        margin: 0 0 10px;
+        font-size: 15px;
+      }
+      label {
+        display: block;
+        margin-bottom: 6px;
+        font-size: 12px;
+        color: #57606a;
+      }
+      input {
+        width: 100%;
+        box-sizing: border-box;
+        padding: 8px 10px;
+        border: 1px solid #d0d7de;
+        border-radius: 6px;
+        font-size: 13px;
+      }
+      button {
+        margin-top: 10px;
+        width: 100%;
+        border: 0;
+        border-radius: 6px;
+        padding: 9px 10px;
+        background: #0969da;
+        color: #fff;
+        font-size: 13px;
+        cursor: pointer;
+      }
+      button:disabled {
+        background: #8c959f;
+        cursor: not-allowed;
+      }
+      #status {
+        margin-top: 10px;
+        min-height: 18px;
+        font-size: 12px;
+        line-height: 1.4;
+      }
+      .ok {
+        color: #1a7f37;
+      }
+      .err {
+        color: #cf222e;
+      }
+      .muted {
+        color: #57606a;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>LinkedIn CDP Resume Downloader</h1>
+    <label for="profileUrl">LinkedIn profile URL</label>
+    <input
+      id="profileUrl"
+      type="url"
+      autocomplete="off"
+      placeholder="https://www.linkedin.com/in/username/"
+    />
+    <button id="downloadBtn">Download Resume (PDF)</button>
+    <div id="status" class="muted"></div>
+    <script src="popup.js"></script>
+  </body>
+</html>
