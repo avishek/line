@@ -16,3 +16,13 @@ node_modules/
 # Local PDF extractor test data
 flow/src/flow/test_data/*
 !flow/src/flow/test_data/.gitkeep
+
+# Flow project (Python/uv artifacts)
+flow/**/__pycache__/
+flow/**/*.py[cod]
+flow/**/*.egg-info/
+flow/.venv/
+flow/.pytest_cache/
+flow/.mypy_cache/
+flow/.ruff_cache/
+flow/uv.lock
