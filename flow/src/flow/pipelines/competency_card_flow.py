@@ -49,6 +49,7 @@ class CompetencyCardFlow(FlowSpec):
 
     @step
     def generate_card(self):
+        load_dotenv()
         tenure_months = None
         if self.tenure_months:
             try:
@@ -89,6 +90,12 @@ class CompetencyCardFlow(FlowSpec):
 
     @step
     def validate_and_persist(self):
+        if isinstance(self.generated_card, dict):
+            dimensions = self.generated_card.get("competency_scores", {}).get("dimensions", {})
+            if isinstance(dimensions, dict):
+                for dimension_data in dimensions.values():
+                    if isinstance(dimension_data, dict) and dimension_data.get("evidence") is None:
+                        dimension_data["evidence"] = []
         card = CompetencyCard.model_validate(self.generated_card)
         output_root = Path(self.output_dir).expanduser().resolve()
         output_root.mkdir(parents=True, exist_ok=True)

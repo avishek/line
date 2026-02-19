@@ -26,3 +26,5 @@ flow/.pytest_cache/
 flow/.mypy_cache/
 flow/.ruff_cache/
 flow/uv.lock
+flow/.metaflow/
+flow/outputs/
