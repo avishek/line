@@ -28,6 +28,14 @@ cp .env.example .env
 
 Set `OPENAI_API_KEY` in `.env`.
 
+## Test PDF extraction locally (no LLM call)
+
+Use the extractor directly to validate your PDF text is readable before running the flow:
+
+```bash
+uv --directory flow run python -m flow.services.pdf_extractor /absolute/path/to/input.pdf
+```
+
 ## Run the flow locally
 
 ```bash

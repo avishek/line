@@ -12,3 +12,7 @@ node_modules/
 *.log
 .env
 .env.local
+
+# Local PDF extractor test data
+flow/src/flow/test_data/*
+!flow/src/flow/test_data/.gitkeep
