@@ -2,17 +2,24 @@ from __future__ import annotations
 
 import json
 import os
+from importlib.resources import files
 from typing import Any
 
 from openai import OpenAI
 
 from flow.schemas.competency_card import CompetencyCard
 
-
-SYSTEM_PROMPT = """You create competency cards from candidate/person evidence.
-Return valid JSON only, no markdown or commentary.
-Use this schema strictly. Do not add or remove top-level fields.
-When evidence is missing, set nullable fields to null and use low confidence."""
+def _load_system_prompt() -> str:
+    prompt_path = files("flow").joinpath("prompts", "agent.md")
+    try:
+        prompt_text = prompt_path.read_text(encoding="utf-8").strip()
+    except FileNotFoundError as exc:
+        raise FileNotFoundError(
+            "Missing prompt file 'flow/prompts/agent.md'. Ensure it is packaged and installed."
+        ) from exc
+    if not prompt_text:
+        raise ValueError("Prompt file 'flow/prompts/agent.md' is empty.")
+    return prompt_text
 
 
 def _build_user_prompt(extracted_text: str, person_payload: dict[str, Any]) -> str:
@@ -20,6 +27,9 @@ def _build_user_prompt(extracted_text: str, person_payload: dict[str, Any]) -> s
     return (
         "Build a Competency Card JSON object from the extracted PDF text.\n"
         "Respect all enum constraints and required fields.\n"
+        "Do not invent extra keys. Keep output strictly aligned to the provided schema.\n"
+        "For each competency dimension, evidence must be an array of objects "
+        "with {text, evidence_type}. Never return evidence as string arrays.\n"
         f"Use this person payload as input context:\n{json.dumps(person_payload, indent=2)}\n\n"
         f"JSON schema:\n{json.dumps(schema, indent=2)}\n\n"
         f"Extracted PDF text:\n{extracted_text}\n"
@@ -43,7 +53,7 @@ def generate_competency_card(
         temperature=0.2,
         response_format={"type": "json_object"},
         messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
+            {"role": "system", "content": _load_system_prompt()},
             {"role": "user", "content": _build_user_prompt(extracted_text, person_payload)},
         ],
     )

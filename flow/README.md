@@ -41,34 +41,58 @@ uv --directory flow run python -m flow.services.pdf_extractor /absolute/path/to/
 ```bash
 uv run python -m flow.pipelines.competency_card_flow run \
   --pdf-path /absolute/path/to/input.pdf \
-  --person-id person_123 \
-  --person-type candidate \
-  --role-family IC \
-  --level L5 \
-  --current-title "Senior Software Engineer" \
-  --primary-org Engineering \
-  --tenure-months 18 \
-  --start-date 2024-01-01 \
-  --end-date 2025-12-31 \
-  --rubric-name "Engineering Competency Rubric" \
-  --rubric-version v1 \
   --output-dir outputs
 ```
 
-Optional model override:
+Optional overrides:
 
 ```bash
 uv run python -m flow.pipelines.competency_card_flow run \
   --pdf-path /absolute/path/to/input.pdf \
   --person-id person_123 \
+  --person-type candidate \
+  --role-family IC \
+  --level "Senior" \
+  --current-title "Senior Software Engineer" \
+  --rubric-name "Engineering Competency Rubric" \
   --model gpt-4o-mini
 ```
+
+## Person attribute derivation
+
+The flow now derives person attributes from resume text by default:
+
+- `current_title`: inferred from title-like lines in the resume.
+- `level`: inferred from title tokens such as `Junior`, `Senior`, `Staff`, `Principal`.
+- `role_family`: mapped from inferred title to one of `IC|EM|PM|TPM|Other`.
+- `person_id`: derived from candidate name when detectable, otherwise from PDF file name.
+
+Attributes that are not reliably derivable from resume alone:
+
+- `person.type` (`internal` or `candidate`) without external context.
+
+When CLI overrides are provided, merge precedence is:
+
+1. Explicit CLI value
+2. Derived value from resume
+3. Safe fallback (`person_id=unknown_person`, `person.type=candidate`, `role_family=Other`)
 
 ## Output
 
 The flow writes one JSON file to the configured output directory:
 
 - `<person_id>_<pdf_stem>_competency_card.json`
+- Schema contract: `schema_version: "1.0"` with competency dimensions:
+  `velocity`, `ownership`, `expertise`, `qed`, `economy`, `code_quality`,
+  `debugging`, `reliability`, `teaching`
+- Each `competency_scores.dimensions.*.evidence` entry is an object:
+  `{ "text": "...", "evidence_type": "..." }`
+
+## Prompt source
+
+- System prompt file: `src/flow/prompts/agent.md`
+- `flow.services.card_generator` loads this file at runtime as the system message.
+- To change rubric behavior, update `agent.md` (no code changes required unless prompt assembly changes).
 
 ## Notes
 
