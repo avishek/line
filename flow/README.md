@@ -58,6 +58,24 @@ uv run python -m flow.pipelines.competency_card_flow run \
   --model gpt-4o-mini
 ```
 
+## Run the batch flow locally
+
+Use this variant to process all top-level `*.pdf` files under a folder:
+
+```bash
+uv run python -m flow.pipelines.competency_card_batch_flow run \
+  --input-dir /absolute/path/to/input-folder \
+  --output-dir outputs
+```
+
+Behavior:
+
+- Scans only PDFs directly inside `--input-dir` (non-recursive).
+- Continues processing even if one PDF fails.
+- Prints a final summary with successful and failed files.
+
+Optional overrides are identical to the single-PDF flow (`--person-id`, `--person-type`, `--role-family`, `--level`, `--current-title`, `--rubric-name`, `--model`).
+
 ## Person attribute derivation
 
 The flow now derives person attributes from resume text by default:
@@ -81,7 +99,9 @@ When CLI overrides are provided, merge precedence is:
 
 The flow writes one JSON file to the configured output directory:
 
-- `<person_id>_<pdf_stem>_competency_card.json`
+- Single flow: `<person_id>_competency_card.json`
+- Batch flow: `<person_id>_<pdf_stem>_competency_card.json` (or
+  `<person_id>_competency_card.json` when `pdf_stem` matches `person_id`)
 - Schema contract: `schema_version: "1.0"` with competency dimensions:
   `velocity`, `ownership`, `expertise`, `qed`, `economy`, `code_quality`,
   `debugging`, `reliability`, `teaching`

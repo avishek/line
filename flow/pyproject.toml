@@ -18,6 +18,7 @@ dependencies = [
 
 [project.scripts]
 competency-card-flow = "flow.pipelines.competency_card_flow:main"
+competency-card-batch-flow = "flow.pipelines.competency_card_batch_flow:main"
 
 [tool.setuptools]
 package-dir = { "" = "src" }
