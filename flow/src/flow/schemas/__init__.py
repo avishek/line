@@ -1,3 +1,3 @@
-from flow.schemas.competency_card import CompetencyCard
+"""Schema package exports."""
 
-__all__ = ["CompetencyCard"]
+__all__: list[str] = []
