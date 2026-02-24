@@ -25,6 +25,8 @@ class DerivePersonAttributesTests(unittest.TestCase):
         self.assertEqual(derived["role_family"], "IC")
         self.assertEqual(derived["level"], "Senior")
         self.assertEqual(derived["current_title"], "Senior Software Engineer")
+        self.assertEqual(derived["name"], "Wenjie Li")
+        self.assertIsNone(derived["linkedin_profile_url"])
 
     def test_falls_back_for_ambiguous_title(self) -> None:
         extracted_text = """
@@ -41,6 +43,8 @@ class DerivePersonAttributesTests(unittest.TestCase):
         self.assertEqual(derived["role_family"], "Other")
         self.assertIsNone(derived["level"])
         self.assertIsNone(derived["current_title"])
+        self.assertEqual(derived["name"], "Avery Stone")
+        self.assertIsNone(derived["linkedin_profile_url"])
 
     def test_uses_pdf_stem_when_name_or_title_missing(self) -> None:
         extracted_text = """
@@ -57,6 +61,8 @@ class DerivePersonAttributesTests(unittest.TestCase):
         self.assertEqual(derived["role_family"], "Other")
         self.assertIsNone(derived["level"])
         self.assertIsNone(derived["current_title"])
+        self.assertIsNone(derived["name"])
+        self.assertIsNone(derived["linkedin_profile_url"])
 
     def test_handles_non_standard_layout(self) -> None:
         extracted_text = """
@@ -73,6 +79,8 @@ class DerivePersonAttributesTests(unittest.TestCase):
         self.assertEqual(derived["role_family"], "IC")
         self.assertEqual(derived["level"], "Staff")
         self.assertEqual(derived["current_title"], "Staff Engineer | Platform")
+        self.assertEqual(derived["name"], "JANE DOE")
+        self.assertIsNone(derived["linkedin_profile_url"])
 
     def test_cleans_company_suffix_from_title(self) -> None:
         extracted_text = """
@@ -86,6 +94,22 @@ class DerivePersonAttributesTests(unittest.TestCase):
 
         self.assertEqual(derived["person_id"], "wjzeeli")
         self.assertEqual(derived["current_title"], "Software Engineer")
+        self.assertEqual(derived["name"], "Candidate Name")
+        self.assertIsNone(derived["linkedin_profile_url"])
+
+    def test_extracts_linkedin_profile_url(self) -> None:
+        extracted_text = """
+        [Page 1]
+        Avishek Bhatia
+        Engineering Leader
+        www.linkedin.com/in/avishekbhatia
+        Contact
+        """
+
+        derived = derive_person_attributes(extracted_text, "/tmp/avishek_bhatia_resume.pdf")
+
+        self.assertEqual(derived["name"], "Avishek Bhatia")
+        self.assertEqual(derived["linkedin_profile_url"], "www.linkedin.com/in/avishekbhatia")
 
 
 if __name__ == "__main__":

@@ -254,7 +254,9 @@ Return a single JSON object matching the schema below.
     "type": "internal|candidate",
     "role_family": "IC|EM|PM|TPM|Other",
     "level": "string|null",
-    "current_title": "string|null"
+    "current_title": "string|null",
+    "name": "string|null",
+    "linkedin_profile_url": "string|null"
   },
   "competency_scores": {
     "rubric_name": "string",

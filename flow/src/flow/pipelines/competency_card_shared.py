@@ -120,6 +120,8 @@ def build_person_payload(
     role_family: str = "",
     level: str = "",
     current_title: str = "",
+    name: str = "",
+    linkedin_profile_url: str = "",
 ) -> dict[str, Any]:
     selected_type = person_type.strip().lower() if person_type else ""
     if selected_type not in {"internal", "candidate"}:
@@ -141,12 +143,24 @@ def build_person_payload(
     if not selected_current_title:
         selected_current_title = str(derived_person.get("current_title") or "")
 
+    selected_name = name.strip() if name else ""
+    if not selected_name:
+        selected_name = str(derived_person.get("name") or "")
+
+    selected_linkedin_profile_url = (
+        linkedin_profile_url.strip() if linkedin_profile_url else ""
+    )
+    if not selected_linkedin_profile_url:
+        selected_linkedin_profile_url = str(derived_person.get("linkedin_profile_url") or "")
+
     return {
         "person_id": selected_person_id,
         "type": selected_type,
         "role_family": selected_role_family,
         "level": selected_level or None,
         "current_title": selected_current_title or None,
+        "name": selected_name or None,
+        "linkedin_profile_url": selected_linkedin_profile_url or None,
     }
 
 

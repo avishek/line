@@ -23,6 +23,8 @@ class CompetencyCardFlow(FlowSpec):
     role_family = Parameter("role-family", type=str, default="")
     level = Parameter("level", type=str, default="")
     current_title = Parameter("current-title", type=str, default="")
+    person_name = Parameter("name", type=str, default="")
+    linkedin_profile_url = Parameter("linkedin-profile-url", type=str, default="")
     rubric_name = Parameter("rubric-name", type=str, default="default_competency_rubric")
     output_dir = Parameter("output-dir", type=str, default="outputs")
     model = Parameter("model", type=str, default="")
@@ -52,6 +54,8 @@ class CompetencyCardFlow(FlowSpec):
             role_family=self.role_family,
             level=self.level,
             current_title=self.current_title,
+            name=self.person_name,
+            linkedin_profile_url=self.linkedin_profile_url,
         )
         generated = generate_competency_card(
             extracted_text=self.extracted_text,

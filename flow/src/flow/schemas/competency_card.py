@@ -15,6 +15,8 @@ class Person(StrictBaseModel):
     role_family: Literal["IC", "EM", "PM", "TPM", "Other"]
     level: str | None = None
     current_title: str | None = None
+    name: str | None = None
+    linkedin_profile_url: str | None = None
 
 
 class ScoreScale(StrictBaseModel):

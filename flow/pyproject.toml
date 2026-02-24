@@ -9,7 +9,9 @@ description = "Metaflow pipelines for PDF-derived competency cards"
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
+  "faiss-cpu",
   "metaflow",
+  "numpy",
   "openai",
   "pydantic>=2.0",
   "pypdf",
@@ -19,6 +21,9 @@ dependencies = [
 [project.scripts]
 competency-card-flow = "flow.pipelines.competency_card_flow:main"
 competency-card-batch-flow = "flow.pipelines.competency_card_batch_flow:main"
+resume-extraction-batch-flow = "flow.pipelines.resume_extraction_batch_flow:main"
+resume-faiss-backfill-flow = "flow.pipelines.resume_faiss_backfill_flow:main"
+resume-knn-search-flow = "flow.pipelines.resume_knn_search_flow:main"
 
 [tool.setuptools]
 package-dir = { "" = "src" }

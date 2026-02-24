@@ -47,6 +47,8 @@ class DerivedPersonAttributes(TypedDict):
     role_family: RoleFamily
     level: str | None
     current_title: str | None
+    name: str | None
+    linkedin_profile_url: str | None
     confidence: dict[str, Literal["high", "medium", "low"]]
 
 
@@ -93,6 +95,19 @@ def _extract_name(lines: list[str]) -> tuple[str | None, Literal["high", "low"]]
         if _is_name_like(line):
             return line, "high"
     return None, "low"
+
+
+def _extract_linkedin_profile_url(lines: list[str]) -> str | None:
+    pattern = re.compile(
+        r"(?i)\b(?:https?://)?(?:www\.)?linkedin\.com/in/[A-Za-z0-9_%\-]+/?"
+    )
+    for line in lines[:60]:
+        match = pattern.search(line)
+        if not match:
+            continue
+        # Trim punctuation from PDF-extracted text wrappers like ')' or '.'
+        return match.group(0).rstrip(".,);]")
+    return None
 
 
 def _extract_current_title(lines: list[str]) -> tuple[str | None, Literal["medium", "low"]]:
@@ -193,6 +208,7 @@ def _infer_role_family(current_title: str | None) -> tuple[RoleFamily, Literal["
 def derive_person_attributes(extracted_text: str, source_pdf: str | Path) -> DerivedPersonAttributes:
     lines = _clean_lines(extracted_text)
     name, name_confidence = _extract_name(lines)
+    linkedin_profile_url = _extract_linkedin_profile_url(lines)
     current_title, title_confidence = _extract_current_title(lines)
     role_family, role_confidence = _infer_role_family(current_title)
     level, level_confidence = _infer_level(current_title)
@@ -207,6 +223,8 @@ def derive_person_attributes(extracted_text: str, source_pdf: str | Path) -> Der
         "role_family": role_family,
         "level": level,
         "current_title": current_title,
+        "name": name,
+        "linkedin_profile_url": linkedin_profile_url,
         "confidence": {
             "person_id": "high" if source_stem else name_confidence,
             "type": "low",

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import inspect
 import sys
 import tempfile
 import unittest
@@ -9,9 +10,11 @@ from unittest.mock import patch
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 from flow.pipelines.competency_card_batch_flow import (  # noqa: E402
+    CompetencyCardBatchFlow,
     _discover_top_level_pdfs,
     _summarize_results,
 )
+from flow.pipelines.competency_card_flow import CompetencyCardFlow  # noqa: E402
 from flow.pipelines.competency_card_shared import persist_competency_card  # noqa: E402
 
 
@@ -51,7 +54,13 @@ class _FakeValidatedCard:
     def model_dump(self, mode: str = "json") -> dict[str, object]:
         return {
             "schema_version": "1.0",
-            "person": {"person_id": "dummy", "type": "candidate", "role_family": "Other"},
+            "person": {
+                "person_id": "dummy",
+                "type": "candidate",
+                "role_family": "Other",
+                "name": None,
+                "linkedin_profile_url": None,
+            },
             "competency_scores": {
                 "rubric_name": "default",
                 "score_scale": {"min": 1, "max": 5},
@@ -86,6 +95,20 @@ class CompetencyCardBatchFilenameTests(unittest.TestCase):
                 filename_suffix="profile_v2",
             )
         self.assertEqual(output_path.name, "arihants_profile_v2_competency_card.json")
+
+
+class FlowNameCollisionRegressionTests(unittest.TestCase):
+    def test_batch_flow_uses_person_name_parameter_for_payload(self) -> None:
+        class_source = inspect.getsource(CompetencyCardBatchFlow)
+        self.assertIn('person_name = Parameter("name"', class_source)
+        self.assertIn("name=self.person_name", class_source)
+        self.assertNotIn("name=self.name", class_source)
+
+    def test_single_flow_uses_person_name_parameter_for_payload(self) -> None:
+        class_source = inspect.getsource(CompetencyCardFlow)
+        self.assertIn('person_name = Parameter("name"', class_source)
+        self.assertIn("name=self.person_name", class_source)
+        self.assertNotIn("name=self.name", class_source)
 
 
 if __name__ == "__main__":
