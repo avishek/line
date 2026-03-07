@@ -1,0 +1,15 @@
+{
+  "manifest_version": 3,
+  "name": "LinkedIn Connected Search",
+  "version": "0.1.0",
+  "description": "Run LinkedIn people search, open the first result via CDP, and capture profile connection signal.",
+  "action": {
+    "default_title": "LinkedIn Connected Search",
+    "default_popup": "popup.html"
+  },
+  "permissions": ["tabs", "debugger", "downloads", "storage"],
+  "host_permissions": ["https://www.linkedin.com/*"],
+  "background": {
+    "service_worker": "background.js"
+  }
+}
